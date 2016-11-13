@@ -1,0 +1,61 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'lt.markav'
+version = '0.1.0'
+Integer vCode = 1
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode(vCode)
+        versionName(version)
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+
+//noinspection GroovyMissingReturnStatement
+install {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://${projectDir}/../repo")
+        }
+    }
+}
+
+task deploy << {
+    ['sh', '-c', "git add ${projectDir}/../repo/."].execute().text.trim()
+}
+
+deploy.dependsOn install
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:recyclerview-v7:25.0.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+
+repositories {
+    mavenCentral()
+}
