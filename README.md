@@ -18,6 +18,6 @@
 ```Groovy
     dependencies {
         ...
-        compile 'lt.markav:adaptivecalendar:{Version}'
+        compile 'lt.markav:simplerecyclearapter:{Version}'
     }
 ```
